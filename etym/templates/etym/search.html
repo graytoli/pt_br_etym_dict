@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="search-results">
+        <div class="terms">
+            {% for term in terms %}
+                <div class="term">
+                    {{ term.modern_word }} 
+                    | da língua: {{ term.language.name }} 
+                    | da palavra: 
+                    <em>{{ term.origin.word }}</em>  
+                    que significa "{{ term.origin.meaning }}"
+                </div>
+            {% endfor %}
+        </div>
+        <div id="map"></div>
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+    <script>
+      function generateInfo(words) {
+        // const words = term.related_words.map((word) => {
+        //   return `<div>${word}</div>`
+        // })
+        // return `${term.modern_word}<br /><h4>Palavras relacionadas:</h4>${words.join('')}`
+
+        const terms = words.map((word) => {
+          return `<div>${word.modern_word}</div>`
+        }).join('');
+
+        let relatedTerms = [];
+        let existingWords = words.map((word) => word.modern_word);
+
+        // words.forEach((word) => {
+        //   relatedTerms[word.modern_word] = null;
+        //   word.related_words.forEach((relatedWord) => {
+        //     if(existingWords.indexOf(relatedWord) !== -1) {
+        //       relatedTerms.push(relatedWord)
+        //     }
+        //   });
+        // });
+
+        // // console.log(relatedTerms)
+        // relatedTerms = relatedTerms.map((word) => {
+        //   return `<div><em>${word}</em></div>`;
+        // }).join('');
+        
+        return terms;
+      }
+      var map;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 5, lng: -3},
+          zoom: 3
+        });
+
+        const url = '/etym/search_json?' + window.location.href.split('?')[1]
+        console.log(url)
+        axios.get(url)
+        .then((response) => {
+          const regions = response.data.results;
+
+          Object.keys(regions).forEach((region) => {
+            const info = new google.maps.InfoWindow({
+              content: generateInfo(regions[region])
+            })
+
+            const marker = new google.maps.Marker({
+              position: regions[region][0].coordinates,
+              map: map,
+              title: region
+            })
+            marker.addListener('click', function() {
+              info.open(map, marker);
+            });
+          })
+
+          // response.data.results.map((term) => {
+          //   var infowindow = new google.maps.InfoWindow({
+          //     content: generateInfo(term)
+          //   });
+
+          //   var marker = new google.maps.Marker({
+          //     position: term.coordinates,
+          //     map: map,
+          //     title: term.modern_word
+          //   });
+          //   marker.addListener('click', function() {
+          //     infowindow.open(map, marker);
+          //   });
+          // })
+          
+        })
+      }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBXxyhOKpXtddGPCnI6neLG_gnoLdVHbZk&callback=initMap"
+    async defer></script>
+{% endblock content %}  

@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css?family=Lato:300');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css');
+
+html, body {
+    min-height: calc(100vh - 40px);
+    font-family: 'Lato', sans-serif;
+    background-color: #FCFAFA;
+}
+
+main {
+    height: calc(100vh - 40px);
+}
+
+button {
+    width: 3em;
+}
+
+nav {
+    display: flex;
+    justify-content:space-between;
+    background-color: #1D4267;
+    padding: 0.70em;
+}
+
+.navbar a {
+    padding-left: 1.75em;
+    padding-right: 1.60em;
+    text-decoration: none;
+    color: #FCFAFA;
+}
+
+.navbar:first-child {
+    font-size: 120%;
+}
+
+.search-container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-results {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    /* min-height: calc(100vh - 40px); */
+    height: 100%;
+}
+
+#map {
+    height: 100%;
+}
+
+.search-results {
+    margin-left: 1em;
+}
+
+.terms .term {
+    margin-top: 1em;
+    margin-right: 1em;
+    padding-bottom: 1em;
+    border-bottom: 1px solid #696969
+}
